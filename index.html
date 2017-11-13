@@ -33,60 +33,68 @@
             "This Is Us", "Entourage", "Seinfeld", "The Simpsons", "Family Matters", "That 70's Show", "Outlander", "The Walking Dead", "Big Little Lies", "Big Bang Theory"
         ];
 
+        function renderButtons() {
+            $("#buttons").empty();
+            for (var i = 0; i < topics.length; i++) {
+                var noSpaces = topics[i].replace(/ /g, '+');
+                $("#buttons").append('<button type="button" class="btn btn-default tvButton" data-title=' + noSpaces + '>' + topics[i] + '</button>');
+                console.log(noSpaces);
+            }
 
-        for (var i = 0; i < topics.length; i++) {
-            var noSpaces = topics[i].replace(/ /g, '+');
-            $("#buttons").append('<button type="button" class="btn btn-default" data-title=' + noSpaces + '>' + topics[i] + '</button>');
-            console.log(noSpaces);
+
+
+
+            $(".tvButton").on("click", function() {
+                $("#gifs").empty();
+                var tvShow = $(this).attr("data-title");
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + tvShow + "&api_key=YnovwKA47pASDe8JvModnuNKkkGiz1CC&limit=10&rating=pg";
+                // console.log(tvShow);
+
+                $.ajax({ url: queryURL, method: "GET" })
+                    .done(function(response) {
+                        console.log(response);
+                        var results = response.data;
+                        for (var i = 0; i <
+                            results.length; i++) {
+                            var gifDiv = $("#gifs");
+                            var rating = results[i].rating;
+                            var p = $("<p>").text("Rating: " + rating);
+                            var tvGif = $("<img>");
+                            tvGif.attr("src", results[i].images.fixed_height_still.url);
+                            gifDiv.prepend(p);
+                            gifDiv.prepend(tvGif);
+                            $("#gifs").prepend(gifDiv);
+                        }
+                    });
+            });
         }
 
-        $(".btn").on("click", function() {
-            $("#gifs").empty();
-            var tvShow = $(this).attr("data-title");
-            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + tvShow + "&api_key=YnovwKA47pASDe8JvModnuNKkkGiz1CC&limit=10&rating=pg";
-            // console.log(tvShow);
+        renderButtons();
 
-            $.ajax({ url: queryURL, method: "GET" })
-                .done(function(response) {
-                    console.log(response);
-                    var results = response.data;
-                    for (var i = 0; i <
-                        results.length; i++) {
-                        var gifDiv = $("#gifs");
-                        var rating = results[i].rating;
-                        var p = $("<p>").text("Rating: " + rating);
-                        var tvGif = $("<img>");
-                        tvGif.attr("src", results[i].images.fixed_height_still.url);
-                        tvGif.attr("data-state", "still");
-                        gifDiv.prepend(p);
-                        gifDiv.prepend(tvGif);
-                        $("#gifs").prepend(gifDiv);
-                    }
-                });
+        $("img").on("click", function() {
+            var state = $(this).attr('data-state');
 
+            if (state === 'still') {
+                $(this).attr("src", $(this).attr(
+                    "data-animate"));
+                $(this).attr("data-state", "animate");
+            }
 
-            $("img").on("click", function() {
-                var state = $(this).attr('data-state');
+            else if (state === 'animate') {
+                $(this.src).html('data-still');
+                $(this.data - state).attr('still');
+            }
+        });
 
-                if (state === 'still') {
-                    $(this).attr("src", $(this).attr(
-                        "data-animate"));
-                    $(this).attr("data-state", "animate");
-                }
+        $("#submit").on("click", function() {
+            event.preventDefault();
 
-                else if (state === 'animate') {
-                    $(this.src).html('data-still');
-                    $(this.data - state).attr('still');
-                }
-            });
+            var newButton = $("#newShow").val();
 
-            $("#submit").on("click", function() {
-                var newButton = $("#newShow").val();
-                console.log(newButton);
+            topics.push(newButton);
+            console.log(topics);
 
-                $(topics).push(newButton);
-                console.log(topics);
-            });
+            renderButtons();
         });
     </script>
 
