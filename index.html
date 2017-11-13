@@ -19,8 +19,8 @@
         </div>
         <br>
         <div class="row">
-            <div id="gifs" class="col-md-8"></div>
-            <div id="form" class="col-md-4">
+            <div id="gifs" class="col-md-9"></div>
+            <div id="form" class="col-md-3">
                 <p id="heading">Add a TV Show</p>
                 <input id="newShow" type="text">
                 <br>
@@ -51,24 +51,28 @@
                 // console.log(tvShow);
 
                 $.ajax({ url: queryURL, method: "GET" })
+
                     .done(function(response) {
-                        console.log(response);
                         var results = response.data;
+
                         for (var i = 0; i < results.length; i++) {
 
                             var gifDiv = $("#gifs");
+                            var itemDiv = $("<div class='col-md-3'>")
                             var rating = results[i].rating;
                             var p = $("<p>").text("Rating: " + rating);
-                            var tvGif = $('<img class="gifImage" data-state="still">');
-                            tvGif.attr("src", results[i].images.fixed_height_still.url);
-                            tvGif.attr("data-animate", results[i].images.fixed_height.url);
-                            tvGif.attr("data-still", results[i].images.fixed_height_still.url);
 
-                            gifDiv.prepend(p);
-                            gifDiv.prepend(tvGif);
-                            $("#gifs").prepend(gifDiv);
+                            var tvGif = $('<img class="gifImage" data-state="still">');
+                            tvGif.attr("src", results[i].images.fixed_height_small_still.url);
+                            tvGif.attr("data-animate", results[i].images.fixed_height_small_still.url);
+                            tvGif.attr("data-still", results[i].images.fixed_height_small_still.url);
+
+                            itemDiv.append(tvGif);
+                            itemDiv.append(p);
+                            gifDiv.prepend(itemDiv);
 
                         }
+
                     });
 
             });
