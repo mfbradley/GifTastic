@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en-us">
+
+<head>
+    <meta charset="UTC-8">
+    <title>GifTastic</title>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row">
+            <div id="buttons" class="col-md-12"></div>
+        </div>
+        <br>
+        <div class="row">
+            <div id="gifs" class="col-md-8"></div>
+            <div id="form" class="col-md-4">
+                <p>Add a TV Show</p>
+                <input id="newShow" type="text">
+                <br>
+                <br>
+                <button id="submit" type="button" class="btn btn-default">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var topics = ["Fresh Prince", "Game of Thrones", "Friends", "Parks and Rec", "New Girl", "Brooklyn99", "Silicon Valley", "Grace and Frankie", "How I Met Your Mother", "Westworld", "Stranger Things",
+            "This Is Us", "Entourage", "Seinfeld", "The Simpsons", "Family Matters", "That 70's Show", "Outlander", "The Walking Dead", "Big Little Lies", "Big Bang Theory"
+        ];
+
+
+        for (var i = 0; i < topics.length; i++) {
+            var noSpaces = topics[i].replace(/ /g, '+');
+            $("#buttons").append('<button type="button" class="btn btn-default" data-title=' + noSpaces + '>' + topics[i] + '</button>');
+            console.log(noSpaces);
+        }
+
+        $(".btn").on("click", function() {
+            $("#gifs").empty();
+            var tvShow = $(this).attr("data-title");
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + tvShow + "&api_key=YnovwKA47pASDe8JvModnuNKkkGiz1CC&limit=10&rating=pg";
+            // console.log(tvShow);
+
+            $.ajax({ url: queryURL, method: "GET" })
+                .done(function(response) {
+                    console.log(response);
+                    var results = response.data;
+                    for (var i = 0; i <
+                        results.length; i++) {
+                        var gifDiv = $("#gifs");
+                        var rating = results[i].rating;
+                        var p = $("<p>").text("Rating: " + rating);
+                        var tvGif = $("<img>");
+                        tvGif.attr("src", results[i].images.fixed_height_still.url);
+                        tvGif.attr("data-state", "still");
+                        gifDiv.prepend(p);
+                        gifDiv.prepend(tvGif);
+                        $("#gifs").prepend(gifDiv);
+                    }
+                });
+
+
+            $("img").on("click", function() {
+                var state = $(this).attr('data-state');
+
+                if (state === 'still') {
+                    $(this).attr("src", $(this).attr(
+                        "data-animate"));
+                    $(this).attr("data-state", "animate");
+                }
+
+                else if (state === 'animate') {
+                    $(this.src).html('data-still');
+                    $(this.data - state).attr('still');
+                }
+            });
+
+            $("#submit").on("click", function() {
+                var newButton = $("#newShow").val();
+                console.log(newButton);
+
+                $(topics).push(newButton);
+                console.log(topics);
+            });
+        });
+    </script>
+
+
+</body>
+
+</html>
