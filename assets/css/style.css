@@ -1,12 +1,15 @@
+/* container holding tv show buttons */
 #buttonHeading {
     margin-top: 20px;
     padding: 10px;
+    text-align: center;
 }
 
 body {
     background-image: url("http://www.benel.eu/images/webshop/click-props-background-vinyl-with-print-wood-pale-1-52-x-1-52m-full-592196-1-34480-625.jpg")
 }
 
+/* buttons for tv shows in topics array */
 .tvButton {
     background-color: purple;
     color: white;
@@ -19,6 +22,7 @@ body {
     color: white;
     font-family: 'Special Elite', cursive;
     font-size: 16px;
+    margin-bottom: 20px;
 }
 
 #heading {
@@ -40,6 +44,5 @@ p {
 
 .gifImage {
     display: inline-block;
-
     padding: 10px;
 }
